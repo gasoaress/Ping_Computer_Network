@@ -1,12 +1,19 @@
 package PingCommand;
+
 import java.net.InetAddress;
+
 public class Ping {
     public static void main(String[] args) throws Exception {
         int intitAddress = 100001;  
         int [] arrayIps = new int [254];
         
         AtribuirIps(arrayIps, intitAddress);
-        IpFormmater(arrayIps);
+        String [] formatedIp = IpFormmater(arrayIps);
+
+        System.out.println("RETORNO BUSCA DE IP:");
+        for (String singleIp : formatedIp){
+            System.out.println(singleIp+": " + SearchAddress(singleIp, 100));
+        }
     }
 
     public static void AtribuirIps (int [] array, int initValue){
@@ -16,8 +23,7 @@ public class Ping {
         }
     }
 
-    public static String IpFormmater (int [] array){
-        //String stringAddress = String.valueOf(address); //Cast int for string
+    public static String [] IpFormmater (int [] array){
         String mountedIP;
         String [] formatedIp = new String[254];
 
@@ -32,22 +38,21 @@ public class Ping {
                 buildIp.insert(6,".");
                 mountedIP = String.valueOf(buildIp);
                 formatedIp[i] = mountedIP;
-                System.out.println(formatedIp[i]);
             } else {
                 buildIp.insert(2,".");
                 buildIp.insert(4,".");
                 buildIp.insert(6,".");
                 mountedIP = String.valueOf(buildIp);
                 formatedIp[i] = mountedIP;
-                System.out.println(formatedIp[i]);
             }
         }
-        return "ok";
+        return formatedIp;
     }
 
-    public static boolean SearchAddress (String address, int searchMaxTime) {
+    public static boolean SearchAddress (String ip, int searchMaxTime) {
         try {
-            
+                InetAddress address = InetAddress.getByName(ip);
+                return address.isReachable(searchMaxTime);
         } catch (Exception e) {
             System.out.println(e);
         }
